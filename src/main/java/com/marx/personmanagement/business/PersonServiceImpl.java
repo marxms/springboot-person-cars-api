@@ -36,7 +36,12 @@ public class PersonServiceImpl implements PersonService {
 		
 		List<PersonRepresentation> listResponse = new ArrayList<PersonRepresentation>(0);
 		for(Person person : personDAO.getList()) {
-			listResponse.add(modelMapper.map(person, PersonRepresentation.class));
+			PersonRepresentation rep = modelMapper.map(person, PersonRepresentation.class);
+			rep.setLogin(person.getUser().getUsername());
+			rep.setLastLogin(person.getUser().getLastLogin());
+			rep.setCreatedAt(person.getUser().getCreatedAt());
+			listResponse.add(rep);
+			
 		}
 		return listResponse;
 	}
@@ -66,6 +71,8 @@ public class PersonServiceImpl implements PersonService {
 		if(person != null) {
 			PersonRepresentation response = modelMapper.map(person, PersonRepresentation.class);
 			response.setLogin(person.getUser().getUsername());
+			response.setLastLogin(person.getUser().getLastLogin());
+			response.setCreatedAt(person.getUser().getCreatedAt());
 			return response;
 		} else {
 			throw new CustomException("Person not found", HttpStatus.NOT_FOUND);
