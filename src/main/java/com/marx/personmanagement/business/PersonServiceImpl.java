@@ -40,8 +40,7 @@ public class PersonServiceImpl implements PersonService {
 			rep.setLogin(person.getUser().getUsername());
 			rep.setLastLogin(person.getUser().getLastLogin());
 			rep.setCreatedAt(person.getUser().getCreatedAt());
-			listResponse.add(rep);
-			
+			listResponse.add(rep);			
 		}
 		return listResponse;
 	}
