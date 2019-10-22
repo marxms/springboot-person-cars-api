@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.marx.personmanagement.business.PersonService;
 import com.marx.personmanagement.business.UserService;
 import com.marx.personmanagement.model.domain.Person;
+import com.marx.personmanagement.model.representation.LoginResponseRepresentation;
 import com.marx.personmanagement.model.representation.PersonRepresentation;
 import com.marx.personmanagement.model.representation.UserResponseDTO;
 
@@ -48,10 +51,13 @@ public class UserController {
   @ApiResponses(value = {//
       @ApiResponse(code = 400, message = "Something went wrong"), //
       @ApiResponse(code = 422, message = "Invalid username/password supplied")})
-  public String login(@RequestBody Map<String, Object> payload) {
+  public ResponseEntity<LoginResponseRepresentation> login(@RequestBody Map<String, Object> payload) {
 	  String username = (String)payload.get("username");
 	  String password = (String)payload.get("password");
-    return userService.signin(username, password);
+	  LoginResponseRepresentation response = new LoginResponseRepresentation();
+	  response.setToken(userService.signin(username, password));
+	  response.setStatus(200);
+    return new ResponseEntity<LoginResponseRepresentation>(response, HttpStatus.OK);
   }
   
   @PostMapping

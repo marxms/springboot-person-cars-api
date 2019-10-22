@@ -36,7 +36,10 @@ public class PersonServiceImpl implements PersonService {
 		
 		List<PersonRepresentation> listResponse = new ArrayList<PersonRepresentation>(0);
 		for(Person person : personDAO.getList()) {
-			listResponse.add(modelMapper.map(person, PersonRepresentation.class));
+			PersonRepresentation rep = modelMapper.map(person, PersonRepresentation.class);
+			rep.setLogin(person.getUser().getUsername());
+			listResponse.add(rep);
+			
 		}
 		return listResponse;
 	}
