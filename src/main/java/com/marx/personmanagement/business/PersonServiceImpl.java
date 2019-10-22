@@ -61,6 +61,10 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public PersonRepresentation updatePerson(Person person) {
+		if(person.getUser() == null) {
+		Person tempPerson = personDAO.findById(person.getId());
+		person.setUser(tempPerson.getUser()); // Front-end temporariamente desconsidera user. 
+		}
 		return modelMapper.map(personDAO.update(person), PersonRepresentation.class);
 	}
 	
